@@ -1,5 +1,4 @@
 class Station
-  # возвращает список поездов  которые на станции
   def initialize(title)
     @title = title
     @trains = []
@@ -10,7 +9,6 @@ class Station
   end
 
   def trains_list(type)
-    # возращает список всех поездов по типу
     @trains.select { |train| train.type == type }
   end
 
@@ -51,7 +49,6 @@ class Train
   end
 
   def stop
-    @speed = 0
   end
 
   def add_wagons
@@ -76,11 +73,11 @@ class Train
   end
 
   def move_front
-    @curent_station = next_station
+    @curent_station = next_station if next_station
   end
 
   def move_back
-    @curent_station = previous_station
+    @curent_station = previous_station if previous_station
   end
 
   def curent_station
@@ -90,7 +87,6 @@ class Train
   def next_station
     if @curent_station == route.stations[-1]
       puts "last station"
-      @curent_station
     else
       route.stations[stations.index(@curent_station) + 1]
     end
@@ -99,7 +95,6 @@ class Train
   def previous_station
     if @curent_station == route.stations[0]
       puts "first station"
-      @curent_station
     else
       route.stations[stations.index(@curent_station) - 1]
     end
