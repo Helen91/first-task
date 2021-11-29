@@ -1,10 +1,14 @@
 class Station
-  def initialize(title)
-    @title = title
+  def initialize(name)
+    @name = name
     @trains = []
   end
 
-  def add(train)
+  def name
+    @name
+  end
+
+  def add_train(train)
     @trains << train
   end
 

@@ -4,7 +4,7 @@ class Train
     @type = type
     @wagons = []
   end
-  
+
   def type
     @type
   end
@@ -33,14 +33,14 @@ class Train
   end
 
   def next_station
-    if @curent_station != route.stations[-1]
-      route.stations[stations.index(@curent_station) + 1]
+    if @curent_station != @route.stations[-1]
+      @route.stations[@route.stations.index(@curent_station) + 1]
     end
   end
 
   def previous_station
-    if @curent_station != route.stations[0]
-      route.stations[stations.index(@curent_station) - 1]
+    if @curent_station != @route.stations[0]
+      @route.stations[@route.stations.index(@curent_station) - 1]
     end
   end
 end
