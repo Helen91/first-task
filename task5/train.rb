@@ -1,46 +1,47 @@
 class Train
+  attr_reader :wagons, :route, :number, :current_station, :type
+
   def initialize(number, type)
     @number = number
     @type = type
     @wagons = []
   end
 
-  def type
-    @type
-  end
-
-  def add_wagon(wagon)
+  def hook_wagon(wagon)
     if wagon.type == type
-      @wagons.push(wagon)
+      wagons.push(wagon)
     end
   end
 
-  def unhook_wagon
-    @wagons.pop
+  def unhook_wagon(wagon)
+    wagons.delete(wagon)
   end
 
   def route=(route)
     @route = route
-    @curent_station = route.stations.first
+    @current_station = route.stations.first
   end
 
   def move_front
-    @curent_station = next_station if next_station
+    current_station = next_station if next_station
   end
 
   def move_back
-    @curent_station = previous_station if previous_station
+    current_station = previous_station if previous_station
   end
 
+  private
+  # не используеться в других классах
+
   def next_station
-    if @curent_station != @route.stations[-1]
-      @route.stations[@route.stations.index(@curent_station) + 1]
+    if current_station != route.stations[-1]
+      route.stations[route.stations.index(current_station) + 1]
     end
   end
 
   def previous_station
-    if @curent_station != @route.stations[0]
-      @route.stations[@route.stations.index(@curent_station) - 1]
+    if current_station != route.stations[0]
+      route.stations[route.stations.index(current_station) - 1]
     end
   end
 end

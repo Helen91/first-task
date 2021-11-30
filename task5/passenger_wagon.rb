@@ -1,5 +1,5 @@
 class PassengerWagon < Wagon
-  def initialize
-    super(:passenger)
+  def initialize(number)
+    super("Пассажирский", number)
   end
 end
