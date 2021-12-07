@@ -1,9 +1,16 @@
 class Station
   attr_reader :name
 
+  @@all = []
+
+  def self.all
+    @@all
+  end
+
   def initialize(name)
     @name = name
     @trains = []
+    @@all << self
   end
 
   def add_train(train)
@@ -11,8 +18,6 @@ class Station
   end
 
   private
-
-  # не используеться в других классах
 
   def trains_list(type)
     @trains.select { |train| train.type == type }

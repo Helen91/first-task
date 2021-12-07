@@ -1,10 +1,22 @@
 class Train
+  include Company
+  include InstanceCounter
   attr_reader :wagons, :route, :number, :current_station, :type
+
+  @@trains = []
+
+  class << self
+    def find(number)
+      @@trains.find { |t| t.number == number }
+    end
+  end
 
   def initialize(number, type)
     @number = number
     @type = type
     @wagons = []
+    @@trains << self
+    register_instance
   end
 
   def hook_wagon(wagon)
