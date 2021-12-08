@@ -7,10 +7,10 @@ module InstanceCounter
   end
 
   module ClassMethods
-  attr_accessor :count
+    attr_writer :instances
 
     def instances
-    puts count
+      @instances || 0
     end
   end
 
@@ -18,8 +18,7 @@ module InstanceCounter
     private
 
     def register_instance
-      self.class.count ||= 0
-      self.class.count += 1
+      self.class.instances += 1
     end
   end
 end
