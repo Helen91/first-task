@@ -32,8 +32,9 @@ class RailRoad
     print "Введите название станции: "
     station_name = gets.chomp
     @stations << Station.new(station_name)
-
     puts "Станция #{station_name} создана!"
+  rescue RuntimeError => e
+    puts "#{e.message}"
   end
 
   def create_train
@@ -51,6 +52,9 @@ class RailRoad
     @trains << train
 
     puts "#{train.type} поезд номер #{train.number} создан!"
+
+  rescue RuntimeError => e
+    puts "#{e.message}"
   end
 
   def create_route

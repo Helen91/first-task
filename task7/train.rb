@@ -1,11 +1,14 @@
+require_relative 'company'
+require_relative 'instance_counter'
+
 class Train
   include Company
   include InstanceCounter
   attr_reader :wagons, :route, :number, :type
   attr_accessor :current_station
 
-  TRAIN_NUMBER = /^[а-яa-z0-9]{3}?-?[а-яa-z0-9]{2}$/i
-  TRAIN_TYPE = /[cargo][passenger]/i
+  NUMBER_REGEX = /^[а-яa-z0-9]{3}-?[а-яa-z0-9]{2}$/i
+  TYPE_REGEX = /[пассажирский][товарный]/i
 
   @@trains = []
 
@@ -22,13 +25,6 @@ class Train
     @@trains << self
     validate!
     register_instance
-  end
-
-  def valid?
-    validate!
-    true
-  rescue
-    false
   end
 
   def hook_wagon(wagon)
@@ -69,7 +65,7 @@ class Train
   end
 
   def validate!
-    raise "Incorrect train type!" if type !~ TRAIN_TYPE
-    raise "Incorrect train number!" if number !~ TRAIN_NUMBER
+    raise "Неправильный тип поезда!" if type !~ TYPE_REGEX
+    raise "Неправильный номер поезда!" if number !~ NUMBER_REGEX
   end
 end

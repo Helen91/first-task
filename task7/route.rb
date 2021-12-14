@@ -1,3 +1,5 @@
+require_relative "instance_counter"
+
 class Route
   include InstanceCounter
   attr_reader :name, :stations
@@ -18,7 +20,6 @@ class Route
 
   private
 
-  # не используеться в других классах
   def print_station
     @stations.each { |station| puts station.name }
   end

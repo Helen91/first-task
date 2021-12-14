@@ -1,4 +1,7 @@
+require_relative "instance_counter"
+
 class Station
+
   include InstanceCounter
   attr_reader :name
 
@@ -12,6 +15,7 @@ class Station
     @name = name
     @trains = []
     @@all << self
+    validate!
     register_instance
   end
 
@@ -27,5 +31,9 @@ class Station
 
   def send_train(train)
     @trains.delete(train)
+  end
+
+  def validate!
+    raise "Неправильное название станции!" if name.nil? || name.empty? 
   end
 end
