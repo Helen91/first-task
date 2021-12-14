@@ -19,6 +19,13 @@ class Station
     register_instance
   end
 
+  def valid?
+    validate!
+    true
+  rescue
+    false
+  end
+
   def add_train(train)
     @trains << train
   end

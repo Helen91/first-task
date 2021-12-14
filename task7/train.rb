@@ -27,6 +27,13 @@ class Train
     register_instance
   end
 
+  def valid?
+    validate!
+    true
+  rescue
+    false
+  end
+
   def hook_wagon(wagon)
     if wagon.type == type
       wagons.push(wagon)
