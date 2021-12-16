@@ -1,0 +1,50 @@
+require_relative "instance_counter"
+
+class Station
+
+  include InstanceCounter
+  attr_reader :name
+
+  @@all = []
+
+  def self.all
+    @@all
+  end
+
+  def initialize(name)
+    @name = name
+    @trains = []
+    @@all << self
+    validate!
+    register_instance
+  end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
+  end
+
+  def each_train
+    @trains.each { |train| yield(train) } if block_given?
+  end
+
+  def add_train(train)
+    @trains << train
+  end
+
+  def send_train(train)
+    @trains.delete(train)
+  end
+
+  private
+
+  def trains_list(type)
+    @trains.select { |train| train.type == type }
+  end
+
+  def validate!
+    raise "Неправильное название станции!" if name.nil? || name.empty? 
+  end
+end
