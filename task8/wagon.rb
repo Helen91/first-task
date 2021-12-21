@@ -1,10 +1,12 @@
-require_relative "company"
+# frozen_string_literal: true
+
+require_relative 'company'
 
 class Wagon
   include Company
 
-  TYPE_REGEX = /[товарный][пассажирский]/i
-  NUMBER_REGEX = /^[а-яa-z0-9]{3}-?[а-яa-z0-9]{2}$/i
+  TYPE_REGEX = /[товарный][пассажирский]/i.freeze
+  NUMBER_REGEX = /^[а-яa-z0-9]{3}-?[а-яa-z0-9]{2}$/i.freeze
 
   attr_reader :type, :number, :places
 
@@ -19,7 +21,7 @@ class Wagon
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
@@ -35,7 +37,7 @@ class Wagon
   private
 
   def validate!
-    raise "Неправильный тип вагона!" if type !~ TYPE_REGEX
-    raise "Неправильный номер вагона!" if number !~ NUMBER_REGEX
+    raise 'Неправильный тип вагона!' if type !~ TYPE_REGEX
+    raise 'Неправильный номер вагона!' if number !~ NUMBER_REGEX
   end
 end

@@ -1,7 +1,9 @@
-require_relative "train"
+# frozen_string_literal: true
+
+require_relative 'train'
 
 class CargoTrain < Train
   def initialize(number)
-    super(number, "Товарный")
+    super(number, 'Товарный')
   end
 end

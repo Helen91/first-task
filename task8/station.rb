@@ -1,7 +1,8 @@
-require_relative "instance_counter"
+# frozen_string_literal: true
+
+require_relative 'instance_counter'
 
 class Station
-
   include InstanceCounter
   attr_reader :name
 
@@ -22,12 +23,12 @@ class Station
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
-  def each_train
-    @trains.each { |train| yield(train) } if block_given?
+  def each_train(&block)
+    @trains.each(&block) if block_given?
   end
 
   def add_train(train)
@@ -45,6 +46,6 @@ class Station
   end
 
   def validate!
-    raise "Неправильное название станции!" if name.nil? || name.empty? 
+    raise 'Неправильное название станции!' if name.nil? || name.empty?
   end
 end

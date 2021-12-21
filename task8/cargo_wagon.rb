@@ -1,13 +1,13 @@
-require_relative "wagon"
+# frozen_string_literal: true
+
+require_relative 'wagon'
 
 class CargoWagon < Wagon
   def initialize(number, volume)
-    super("Товарный", number, volume.to_f)
+    super('Товарный', number, volume.to_f)
   end
 
   def up_volume(volume)
-    if @occupied_places + volume < places
-      @occupied_places += volume
-    end
+    @occupied_places += volume if @occupied_places + volume < places
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RailRoad
   def initialize
     @stations = []
@@ -12,56 +14,57 @@ class RailRoad
       operation = gets.chomp.to_i
 
       case operation
-      when 1 then self.create_station
-      when 2 then self.create_train
-      when 3 then self.change_route
-      when 4 then self.follow_route
-      when 5 then self.hook_wagon
-      when 6 then self.unhook_wagon
-      when 7 then self.move_train
-      when 8 then self.show_stations_trains
+      when 1 then create_station
+      when 2 then create_train
+      when 3 then change_route
+      when 4 then follow_route
+      when 5 then hook_wagon
+      when 6 then unhook_wagon
+      when 7 then move_train
+      when 8 then show_stations_trains
       when 0 then break
       end
     end
   end
 
   private
+
   # закрытый интерфейс
 
   def create_station
-    print "Введите название станции: "
+    print 'Введите название станции: '
     station_name = gets.chomp
     @stations << Station.new(station_name)
     puts "Станция #{station_name} создана!"
   rescue RuntimeError => e
-    puts "#{e.message}"
+    puts e.message.to_s
   end
 
   def create_train
-    print "Введите номер поезда: "
+    print 'Введите номер поезда: '
     number = gets.chomp
 
     print TRAIN_TYPE_CHOICE
     chosen_type = gets.chomp.to_i
 
-    if chosen_type == 1
+    case chosen_type
+    when 1
       train = PassengerTrain.new(number)
-    elsif chosen_type == 2
+    when 2
       train = CargoTrain.new(number)
     end
     @trains << train
 
     puts "#{train.type} поезд номер #{train.number} создан!"
-
   rescue RuntimeError => e
-    puts "#{e.message}"
+    puts e.message.to_s
   end
 
   def create_route
-    puts "Выберите первую станцию маршрута: "
-    first_station = self.choose_station
-    puts "Выберите конечную станцию маршрута: "
-    last_station = self.choose_station
+    puts 'Выберите первую станцию маршрута: '
+    first_station = choose_station
+    puts 'Выберите конечную станцию маршрута: '
+    last_station = choose_station
 
     route = Route.new(first_station, last_station)
     @routes << route
@@ -70,17 +73,17 @@ class RailRoad
   end
 
   def add_station
-    route = self.choose_route
-    station = self.choose_station
+    route = choose_route
+    station = choose_station
     route.add_station(station)
     puts "Станция #{station.name} добавлена в маршрут!"
   rescue RuntimeError => e
-    puts "#{e.message}"
+    puts e.message.to_s
   end
 
   def delete_station
-    route = self.choose_route
-    station = self.choose_station
+    route = choose_route
+    station = choose_station
     route.delete_station(station)
     puts "Станция #{station.name} удалена из маршрута!"
   end
@@ -92,9 +95,9 @@ class RailRoad
       route_operation = gets.chomp.to_i
 
       case route_operation
-      when 1 then self.create_route
-      when 2 then self.add_station
-      when 3 then self.delete_station
+      when 1 then create_route
+      when 2 then add_station
+      when 3 then delete_station
       when 0 then break
       end
     end
@@ -110,17 +113,17 @@ class RailRoad
 
   def hook_wagon
     train = choose_train
-    print "Введите номер вагона: "
+    print 'Введите номер вагона: '
     wagon_number = gets.chomp
-  
 
-    if train.type == "Пассажирский"
-      print "Ведите количесво мест: "
+    case train.type
+    when 'Пассажирский'
+      print 'Ведите количесво мест: '
       places = gets.chomp
       wagon = PassengerWagon.new(wagon_number, places)
       train.hook_wagon(wagon)
-    elsif train.type == "Товарный"
-      print "Ведите объем вагона: "
+    when 'Товарный'
+      print 'Ведите объем вагона: '
       volume = gets.chomp
       wagon = CargoWagon.new(wagon_number, volume)
       train.hook_wagon(wagon)
@@ -128,7 +131,7 @@ class RailRoad
 
     puts "Вагон номер #{wagon.number} добавлен."
   rescue RuntimeError => e
-    puts "#{e.message}"
+    puts e.message.to_s
   end
 
   def unhook_wagon
@@ -145,21 +148,22 @@ class RailRoad
       puts MOVING_TRAIN
       direction = gets.chomp.to_i
 
-      if direction == 1
+      case direction
+      when 1
         train.move_front
-      elsif direction == 2
+      when 2
         train.move_back
       end
       print "Поезд прибыл на станцию #{train.current_station.name}"
     else
-      puts "Поезду не назначен маршрут("
+      puts 'Поезду не назначен маршрут('
     end
   end
 
   def show_stations_trains
-    puts "Станции:"
-    @stations.each  do |station|
-      puts "#{station.name}"
+    puts 'Станции:'
+    @stations.each do |station|
+      puts station.name.to_s
       station.each_train do |train|
         puts "#{train.type}, #{train.number}, #{train.wagons_size}"
         train.each_wagon do |wagon|
@@ -170,25 +174,25 @@ class RailRoad
   end
 
   def choose_route
-    puts "Выберите маршрут:"
+    puts 'Выберите маршрут:'
     @routes.each_index { |index| puts "#{index + 1} - #{@routes[index].name}" }
     @routes[gets.chomp.to_i - 1]
   end
 
   def choose_train
-    puts "Выберите поезд:"
+    puts 'Выберите поезд:'
     @trains.each_index { |index| puts "#{index + 1} - #{@trains[index].type} поезд номер #{@trains[index].number}" }
     @trains[gets.chomp.to_i - 1]
   end
 
   def choose_wagon(train)
-    puts "Выберите вагон:"
-    train.wagons.each_index { |index| puts "#{index + 1} - #{train.wagons[index].number}"}
+    puts 'Выберите вагон:'
+    train.wagons.each_index { |index| puts "#{index + 1} - #{train.wagons[index].number}" }
     train.wagons[gets.chomp.to_i - 1]
   end
 
   def choose_station
-    @stations.each_index { |index| puts "#{index + 1} - #{@stations[index].name}"}
+    @stations.each_index { |index| puts "#{index + 1} - #{@stations[index].name}" }
     @stations[gets.chomp.to_i - 1]
   end
 end

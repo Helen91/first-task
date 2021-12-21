@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'company'
 require_relative 'instance_counter'
 
@@ -7,8 +9,8 @@ class Train
   attr_reader :wagons, :route, :number, :type
   attr_accessor :current_station
 
-  NUMBER_REGEX = /^[а-яa-z0-9]{3}-?[а-яa-z0-9]{2}$/i
-  TYPE_REGEX = /[пассажирский][товарный]/i
+  NUMBER_REGEX = /^[а-яa-z0-9]{3}-?[а-яa-z0-9]{2}$/i.freeze
+  TYPE_REGEX = /[пассажирский][товарный]/i.freeze
 
   @@trains = []
 
@@ -30,7 +32,7 @@ class Train
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
@@ -38,14 +40,12 @@ class Train
     wagons.size
   end
 
-  def each_wagon
-    wagons.each { |wagon| yield(wagon) } if block_given?
+  def each_wagon(&block)
+    wagons.each(&block) if block_given?
   end
 
   def hook_wagon(wagon)
-    if wagon.type == type
-      wagons.push(wagon)
-    end
+    wagons.push(wagon) if wagon.type == type
   end
 
   def unhook_wagon(wagon)
@@ -73,19 +73,15 @@ class Train
   private
 
   def next_station
-    if current_station != route.stations[-1]
-      route.stations[route.stations.index(current_station) + 1]
-    end
+    route.stations[route.stations.index(current_station) + 1] if current_station != route.stations[-1]
   end
 
   def previous_station
-    if current_station != route.stations[0]
-      route.stations[route.stations.index(current_station) - 1]
-    end
+    route.stations[route.stations.index(current_station) - 1] if current_station != route.stations[0]
   end
 
   def validate!
-    raise "Неправильный тип поезда!" if type !~ TYPE_REGEX
-    raise "Неправильный номер поезда!" if number !~ NUMBER_REGEX
+    raise 'Неправильный тип поезда!' if type !~ TYPE_REGEX
+    raise 'Неправильный номер поезда!' if number !~ NUMBER_REGEX
   end
 end
