@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 require_relative 'instance_counter'
+require_relative 'validation'
 
 class Station
   include InstanceCounter
+  include Validation
+
   attr_reader :name
+
+  validate :name, :presence
 
   @@all = []
 
@@ -18,13 +23,6 @@ class Station
     @@all << self
     validate!
     register_instance
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   def each_train(&block)
@@ -43,9 +41,5 @@ class Station
 
   def trains_list(type)
     @trains.select { |train| train.type == type }
-  end
-
-  def validate!
-    raise 'Неправильное название станции!' if name.nil? || name.empty?
   end
 end
