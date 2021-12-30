@@ -28,19 +28,11 @@ module Validation
     def validate!
       self.class.validations.each do |validation|
         value = instance_variable_get("@#{validation[:attr]}")
-
-        case validation[:type]
-        when :presence
-          presence(value)
-        when :format
-          format(value, validation[:option])
-        when :type
-          type(value, validation[:option])
-        end
+        send(validation[:type], value, validation[:option])
       end
     end
 
-    def presence(value)
+    def presence(value, _option)
       raise "Не может быть пустым" if value.nil? || value.to_s.empty?
     end
 
